@@ -82,9 +82,9 @@ final class LocalizedIllustrationTests: XCTestCase {
 
     func testAppearanceAndDirectionChangeTheRenderedIllustration() throws {
         let drawer = try IllustrationDrawer(directory: resources)
-        let light = try rendered(XCTUnwrap(drawer.image("settings-thumbnails"))).representation(using: .png, properties: [:])
-        let dark = try rendered(XCTUnwrap(drawer.image("settings-thumbnails", dark: true))).representation(using: .png, properties: [:])
-        let rtl = try rendered(XCTUnwrap(drawer.image("settings-thumbnails", rightToLeft: true))).representation(using: .png, properties: [:])
+        let light = try rendered(XCTUnwrap(drawer.image("permission-accessibility"))).representation(using: .png, properties: [:])
+        let dark = try rendered(XCTUnwrap(drawer.image("permission-accessibility", dark: true))).representation(using: .png, properties: [:])
+        let rtl = try rendered(XCTUnwrap(drawer.image("permission-accessibility", rightToLeft: true))).representation(using: .png, properties: [:])
         XCTAssertNotEqual(light, dark)
         XCTAssertNotEqual(light, rtl)
     }

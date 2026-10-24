@@ -1,3 +1,20 @@
+# Free-Alt-Tab
+
+## 1.0.0 (2026-10-24)
+
+Source-only release for Apple silicon and macOS 26+.
+
+* Make all included window-switching, style, sizing, search and shortcut features available without licensing.
+* Remove activation, trial promotion, remote crash reporting and automatic binary updates.
+* Add independent branding and user-requested AltTab settings import with validation, backup and rollback.
+* Keep the upstream AppKit implementation, source history and GPL-3.0 license.
+
+See `docs/verification.md` for build/test evidence and desktop scenarios requiring manual validation.
+
+---
+
+# Upstream AltTab history
+
 ## [11.10.1](https://github.com/lwouis/alt-tab-macos/compare/v11.10.0...v11.10.1) (2026-10-23)
 
 
