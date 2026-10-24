@@ -8,6 +8,28 @@ Local implementation checks run on an arm64 Mac with macOS 26.6.2 and Command Li
 
 CI compilation is not a claim that all desktop interactions below have been exercised. Hardware-dependent behavior and performance measurements require a signed build on the target desktop.
 
+## Automated results — 2026-10-24
+
+Tested application/test sources: `1082c649e9fd69802e336225057402b86f78daa0`.
+The release adds only this verification record after that commit.
+
+[Successful CI run](https://github.com/stephen2754/Free-Alt-Tab/actions/runs/40103689212)
+
+| Environment | Debug | Release | XCTest |
+|---|---|---|---|
+| macOS 26 / Xcode 26.6 / arm64 | Passed | Passed | 1,363 tests, 0 failures |
+| macOS 27 / Xcode 27.1 / arm64 | Passed | Passed | 1,363 tests, 0 failures |
+
+Both CI jobs also passed project-reference validation, native localization extraction and format checks
+for 21 languages, generated-artwork verification, six illustration compiler tests, and the shared import
+safety checks. Locally, the import runner passed 38 assertions; Debug/Release Swift type checking passed
+with warnings treated as errors. Full local Xcode commands were attempted but could not run with Command
+Line Tools alone; the successful application builds and XCTest results above are from CI.
+
+The 250 ms compile-time diagnostics remain enabled. CI bounds build concurrency to reduce shared-runner
+contention. A retained artwork test uses permission artwork for RTL changes and verifies that artwork
+without theme overrides remains unchanged between appearances.
+
 ## Manual acceptance matrix
 
 Record OS version, hardware, build commit, signing identity and actual result for each run. Until a result is recorded, these scenarios remain unverified for this fork.
