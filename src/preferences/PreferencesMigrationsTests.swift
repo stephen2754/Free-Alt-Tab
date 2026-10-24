@@ -19,7 +19,7 @@ final class PreferencesMigrationsTests: XCTestCase {
 
     override func setUp() {
         super.setUp()
-        suiteName = "com.lwouis.alt-tab-macos.tests.migrations"
+        suiteName = "io.github.stephen2754.free-alt-tab.tests.migrations"
         defaults = TestDefaults.make(suiteName)
         PreferencesMigrations.defaults = defaults
     }

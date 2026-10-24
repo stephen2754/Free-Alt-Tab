@@ -74,7 +74,7 @@ enum AltTabSettingsImport {
             guard let text = value as? String, let data = text.data(using: .utf8) else { return false }
             return (try? JSONDecoder().decode([ExceptionEntry].self, from: data)) != nil
         }
-        let globalCounts = [
+        let globalCounts: [String: Int] = [
             "nextWindowGesture": GesturePreference.allCases.count,
             "cursorFollowFocus": CursorFollowFocus.allCases.count,
             "appearanceStyle": AppearanceStylePreference.allCases.count,
@@ -87,7 +87,7 @@ enum AltTabSettingsImport {
             "language": LanguagePreference.allCases.count,
         ]
         for (key, count) in globalCounts { result[key] = .index(count) }
-        let indexedCounts = [
+        let indexedCounts: [String: Int] = [
             "appsToShow": AppsToShowPreference.allCases.count,
             "spacesToShow": SpacesToShowPreference.allCases.count,
             "screensToShow": ScreensToShowPreference.allCases.count,
