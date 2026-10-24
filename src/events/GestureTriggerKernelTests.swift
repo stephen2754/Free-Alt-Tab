@@ -1,7 +1,7 @@
 import XCTest
 
 /// Pins `GestureTriggerKernel` and `GestureTracker`, the decision extracted from `TrackpadEvents` for
-/// #5137 ("the trackpad gesture stops working until AltTab is relaunched"). Pure value types in,
+/// #5137 ("the trackpad gesture stops working until Free-Alt-Tab is relaunched"). Pure value types in,
 /// `Outcome` out — no trackpad, no taps, no globals; `TrackpadEvents` is the adapter that maps
 /// `NSTouch` into these frames.
 ///

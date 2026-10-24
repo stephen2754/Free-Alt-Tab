@@ -85,7 +85,7 @@ class GestureTracker {
 /// Pure state machine for the trackpad gesture *trigger*: the decision, taken while the switcher is
 /// NOT open, of whether the fingers on the trackpad just performed AltTab's summon swipe.
 ///
-/// Extracted from `TrackpadEvents` because #5137 ("the gesture stops working until AltTab is
+/// Extracted from `TrackpadEvents` because #5137 ("the gesture stops working until Free-Alt-Tab is
 /// relaunched") was a reset-path bug in here, of a kind no live pass can catch: the trigger has
 /// state that outlives a gesture, and two pieces of it could keep a value that made every later
 /// swipe fail. `TrackpadEvents` stays the adapter — event taps, `NSTouch` mapping, haptics, showing

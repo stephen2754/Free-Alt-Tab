@@ -1,6 +1,6 @@
 import Foundation
 
-/// Pure decision layer for "can AltTab actually persist its preferences to disk?".
+/// Pure decision layer for "can Free-Alt-Tab actually persist its preferences to disk?".
 ///
 /// AltTab stores prefs via `UserDefaults`/`CFPreferences`, which `cfprefsd` brokers. cfprefsd keeps values
 /// in memory and flushes them to `~/Library/Preferences/<suite>.plist` on its own schedule, so a setting can

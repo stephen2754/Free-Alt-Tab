@@ -9,10 +9,10 @@ import AppKit
 /// flag couldn't persist anyway, since persistence is exactly what's broken).
 enum PreferencesPersistenceCheck {
     /// Every suite AltTab persists to. `UserDefaults.standard` is keyed by the bundle id; the others are
-    /// explicit suites (license/Pro-transition state, usage stats). System suites we only read (e.g.
+    /// explicit suites (local usage stats). System suites we only read (e.g.
     /// `com.apple.Finder`) are out of scope.
     static func suiteNames() -> [String] {
-        [App.bundleIdentifier, LicenseManager.defaultsSuiteName, "\(App.bundleIdentifier).usage"]
+        [App.bundleIdentifier, "\(App.bundleIdentifier).usage"]
     }
 
     /// Entry point, called early from `applicationDidFinishLaunching`. Probes off-main; the (rare) alert
@@ -49,7 +49,7 @@ enum PreferencesPersistenceCheck {
         let (message, paths) = dialogContent(symlinkedPaths: symlinkedPaths, unwritablePaths: unwritablePaths)
         let alert = NSAlert()
         alert.alertStyle = .critical
-        alert.messageText = NSLocalizedString("Your settings reset every time AltTab restarts.", comment: "")
+        alert.messageText = NSLocalizedString("Your settings reset every time Free-Alt-Tab restarts.", comment: "")
         alert.informativeText = message
         // The path goes in a non-wrapping accessory label so it stays on one line; NSAlert widens to fit it.
         alert.accessoryView = pathLabel(paths)
@@ -71,9 +71,9 @@ enum PreferencesPersistenceCheck {
     /// replaces it is then under the user's control anyway.
     private static func dialogContent(symlinkedPaths: [String], unwritablePaths: [String]) -> (message: String, paths: [String]) {
         if !symlinkedPaths.isEmpty {
-            return (NSLocalizedString("AltTab preferences file is a symlink. macOS doesn’t support symlink for preferences. Please use a valid file instead of a symlink here:", comment: ""), symlinkedPaths)
+            return (NSLocalizedString("Free-Alt-Tab preferences file is a symlink. macOS doesn’t support symlink for preferences. Please use a valid file instead of a symlink here:", comment: ""), symlinkedPaths)
         }
-        return (NSLocalizedString("AltTab preferences file isn’t writable by your account. Please fix ownership and permissions of the file here:", comment: ""), unwritablePaths)
+        return (NSLocalizedString("Free-Alt-Tab preferences file isn’t writable by your account. Please fix ownership and permissions of the file here:", comment: ""), unwritablePaths)
     }
 
     /// A selectable, non-wrapping label (one line per path) used as the alert's accessory, so a long path

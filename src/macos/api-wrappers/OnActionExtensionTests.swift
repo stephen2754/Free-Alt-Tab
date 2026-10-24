@@ -109,7 +109,7 @@ final class OnActionExtensionTests: XCTestCase {
         let original = control.onAction
 
         control.onAction = { _ in
-            // simulate the "isProLocked + isProSegment" branch: do side effect, return early
+            // simulate a validation branch: do side effect, return early
             // original?(c) is NOT called here
         }
         _ = original

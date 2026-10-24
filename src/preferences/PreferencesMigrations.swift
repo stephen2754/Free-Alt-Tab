@@ -17,13 +17,12 @@ class PreferencesMigrations {
     static func migratePreferences() {
         let preferencesKey = "preferencesVersion"
         let existingVersion = Self.defaults.string(forKey: preferencesKey)
-        ProTransitionState.markFreshInstallIfUnknown(existingVersion == nil)
         if let versionInPlist = existingVersion {
-            if versionInPlist != "#VERSION#" && versionInPlist.compare(App.version, options: .numeric) != .orderedDescending {
+            if versionInPlist != "#VERSION#" && versionInPlist.compare(PreferencesFormat.current, options: .numeric) != .orderedDescending {
                 updateToNewPreferences(versionInPlist)
             }
         }
-        Self.defaults.set(App.version, forKey: preferencesKey)
+        Self.defaults.set(PreferencesFormat.current, forKey: preferencesKey)
     }
 
     static func updateToNewPreferences(_ versionInPlist: String) {
@@ -366,7 +365,7 @@ class PreferencesMigrations {
         migratePreferenceValue("showOnScreen", ["Main screen": "0", "Active screen": "0", "Screen including mouse": "1"])
         migratePreferenceValue("appsToShow", ["All apps": "0", "Active app": "1"])
         migratePreferenceValue("spacesToShow", ["All spaces": "0", "Active space": "1"])
-        migratePreferenceValue("screensToShow", ["All screens": "0", "Screen showing AltTab": "1"])
+        migratePreferenceValue("screensToShow", ["All screens": "0", "Screen showing Free-Alt-Tab": "1"])
     }
 
     static func migrateMenubarIconFromCheckboxToDropdown() {

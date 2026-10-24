@@ -64,7 +64,7 @@ class PermissionsWindow: NSWindow {
     }
 
     private func setupWindow() {
-        applySecondaryWindowChrome(NSLocalizedString("AltTab requires some permissions", comment: "Permissions window title"))
+        applySecondaryWindowChrome(NSLocalizedString("Free-Alt-Tab requires some permissions", comment: "Permissions window title"))
         isMovableByWindowBackground = true
         [NSWindow.ButtonType.closeButton, .miniaturizeButton, .zoomButton].forEach {
             standardWindowButton($0)?.isHidden = true
@@ -118,7 +118,7 @@ class PermissionsWindow: NSWindow {
         accessibilityView = PermissionView(
             1,
             Self.accessibilityPermissionName(),
-            NSLocalizedString("AltTab requires this permission to focus windows for you.", comment: "Permissions window"),
+            NSLocalizedString("Free-Alt-Tab requires this permission to focus windows for you.", comment: "Permissions window"),
             .accessibility)
         return accessibilityView
     }
@@ -137,14 +137,14 @@ class PermissionsWindow: NSWindow {
         screenRecordingView = PermissionView(
             2,
             NSLocalizedString("Screen Recording", comment: ""),
-            NSLocalizedString("AltTab requires this permission to show you pictures of each window.", comment: "Permissions window"),
+            NSLocalizedString("Free-Alt-Tab requires this permission to show you pictures of each window.", comment: "Permissions window"),
             .screenRecording,
             onGrantAfterSkip: { Self.grantScreenRecording() })
         return screenRecordingView
     }
 
     private func makeBottomBar() -> NSView {
-        let quit = Button(String(format: NSLocalizedString("Quit %@", comment: "%@ is AltTab"), App.name)) { _ in
+        let quit = Button(String(format: NSLocalizedString("Quit %@", comment: "%@ is Free-Alt-Tab"), App.name)) { _ in
             App.shared.terminate(nil)
         }
         quit.attributedTitle = NSAttributedString(string: quit.title, attributes: [

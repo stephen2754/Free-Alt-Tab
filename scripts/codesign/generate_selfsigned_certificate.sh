@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-set -exu
+set -eu
 
 certificateFile="$1"
 certificatePassword="$2"
@@ -11,7 +11,7 @@ cat >$certificateFile.conf <<EOL
   distinguished_name = req_name
   prompt = no
   [ req_name ]
-  CN = Local Self-Signed
+  CN = Free-Alt-Tab Local
   [ extensions ]
   basicConstraints=critical,CA:false
   keyUsage=critical,digitalSignature
@@ -22,7 +22,7 @@ EOL
 # generate key
 openssl genrsa -out $certificateFile.key 2048
 # generate self-signed certificate
-openssl req -x509 -new -config $certificateFile.conf -nodes -key $certificateFile.key -extensions extensions -sha256 -out $certificateFile.crt
+openssl req -x509 -days 3650 -new -config $certificateFile.conf -nodes -key $certificateFile.key -extensions extensions -sha256 -out $certificateFile.crt
 
 openssl_version=$(openssl version)
 # openssl v3.x requires to pass -legacy

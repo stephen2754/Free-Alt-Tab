@@ -277,17 +277,13 @@ extension NSPanel {
 extension NSSearchField {
     /// The switcher's search field and the settings sidebar's look the same and both want every
     /// keystroke rather than a debounced one. `controlSize` tracks the OS: macOS 26 draws search
-    /// fields as a taller pill, and 13 through 15 as the `.large` bezel.
+    /// fields as a taller pill.
     func applySearchStyle() {
         placeholderString = NSLocalizedString("Search", comment: "")
         sendsSearchStringImmediately = true
         sendsWholeSearchString = true
         bezelStyle = .roundedBezel
-        if #available(macOS 26.0, *) {
-            controlSize = .extraLarge
-        } else if #available(macOS 13.0, *) {
-            controlSize = .large
-        }
+        controlSize = .extraLarge
     }
 }
 

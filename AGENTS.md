@@ -30,6 +30,6 @@ A wrong comment costs several times more than a missing one, for humans and agen
 - In a git worktree, copy `config/local.xcconfig` over from the main checkout before building. It's gitignored, so a fresh worktree doesn't have it, and `debug.xcconfig` / `release.xcconfig` `#include?` it. Without it the build dies at CodeSign ("no identity found") on a dependency framework, BEFORE the app target's own Swift compile — so it looks like the code compiled when nothing of `src/` was checked. `ai/test.sh` doesn't cover that either: the `unit-tests` target has its own source list and never builds the app target
 - Git commit messages must respect our pre-hook conventions, and must be clear and high-level, written for end-users (changelog)
 
-# License / Keychain invariant
-- The app's Developer ID, TeamID, and bundle ID must remain stable across builds. Keychain items are tied to the code signature; changing any of these orphans every user's stored license key and forces mass re-activation. If a rotation is unavoidable, plan a migration first (e.g., a backup-restore handler, or `kSecAttrAccessGroup` with a stable group identifier).
-- Do not introduce legacy `SecKeychain*` API or `kSecAccessControl` (biometric/PIN gating) into license code — both can trigger Keychain password prompts, which is bad UX for license activation.
+# Application identity
+- Keep the Free-Alt-Tab bundle ID and local signing identity stable across builds so macOS permissions remain attached to this application.
+- Licensing and trial code are not part of this fork. Import only functional upstream preferences; never modify the original application's settings or Keychain.

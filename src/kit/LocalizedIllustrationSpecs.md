@@ -45,20 +45,8 @@ does not repeat string substitution or fitting. Illustrations stay outside switc
 All Settings appearance cards, Customize previews, Day 4 cards, Pro feature comparisons,
 and permission scenes use these resources. The rabbit and app/menu icons remain branding;
 interactive keycaps, success ticks, speech bubbles and ordinary controls remain native.
-Pro badges are native ProBadgeView overlays, never part of SVG artwork. Comparison headings
-and captions remain SVG text. An optional ID-to-string override supplies evidence-dependent
-wording (such as “With Pro”); overrides participate in the image cache key.
-
-Every compiled resource is checked for native vector drawing. The compiler rejects unsupported
-features and external resources. Canonical sources retain bounded text metadata and no Pro badge. The two comparison desktops remain stationary;
-only the switcher is scaled for Auto Size. All three Settings styles are reviewed at native sizes.
-Switcher illustrations select the second item when available, consistently across Show/Hide
-and comparison variants. Search places its field inside the switcher above two matching
-Japan windows, compared with twelve smaller unfiltered windows. Shortcut captions sit
-below their examples, with a clear gap after the continuation dots. Comparison captions share
-a 218-unit baseline. Search shows tightly bounded yellow query matches in the two result
-titles, without a caret in its query field. Permission scenes retain their content scale with 12 extra points of desktop padding
-on each side, and use the same centered shaft-and-chevron arrow as the comparisons.
+Settings illustrations retain native vector window frames and localized example titles. Permission
+scenes retain their content scale with desktop padding on each side.
 English example titles fit at their authored font sizes without truncation; use shorter examples
 instead of relying on localization fitting. Customize Show/Hide pairs retain the same scene.
 The visible state outlines the affected accessory in red; the hidden state removes both the

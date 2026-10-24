@@ -305,7 +305,7 @@ final class PreferencesMigrationsTests: XCTestCase {
 
     func testDropdownTextValuesBecomeIndexes() {
         defaults.set("Active app", forKey: "appsToShow")
-        defaults.set("Screen showing AltTab", forKey: "screensToShow")
+        defaults.set("Screen showing Free-Alt-Tab", forKey: "screensToShow")
         PreferencesMigrations.migrateDropdownsFromTextToIndexes()
         XCTAssertEqual(defaults.string(forKey: "appsToShow"), "1")
         XCTAssertEqual(defaults.string(forKey: "screensToShow"), "1")
@@ -389,9 +389,7 @@ extension App {
     static let version = "99.99.99"
 }
 
-extension ProTransitionState {
-    static func markFreshInstallIfUnknown(_ value: Bool) {}
-}
+
 
 // Preferences encoding surface used by the migrations
 

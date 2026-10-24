@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 """Check app and vendored UI translations against AltTab's supported languages."""
+import argparse
 import json
 from pathlib import Path
 import re
@@ -30,23 +31,18 @@ def extracted_keys():
         return set(strings(folder / 'Localizable.strings'))
 
 
-def validate():
+def validate(check_extracted=True):
     app = ROOT / 'resources/l10n'
     languages = {p.stem for p in app.glob('*.lproj')}
     tables = [(app, 'Localizable'),
-              (ROOT / 'vendor/ShortcutRecorder/Sources/ShortcutRecorder', 'ShortcutRecorder'),
-              (ROOT / 'vendor/Sparkle/Sources/Sparkle', 'Sparkle')]
+              (ROOT / 'vendor/ShortcutRecorder/Sources/ShortcutRecorder', 'ShortcutRecorder')]
     errors = []
     preferences = (ROOT / 'src/preferences/MacroPreferences.swift').read_text()
     language_metadata = preferences.split('enum LanguagePreference:', 1)[1].split('var localizedString:', 1)[0]
     selectable = set(re.findall(r'\("[^"\n]+", "([a-z]{2}(?:-[A-Z]{2})?)"\)', language_metadata))
     if languages != selectable or len(selectable) != 21:
         errors.append(f'Localizable: expected the 21 selectable languages; missing {sorted(selectable - languages)}; extra {sorted(languages - selectable)}')
-    updater = ROOT / 'vendor/Sparkle/Helpers/Updater.app/Contents/Info.plist'
-    declared = set(strings(updater).get('CFBundleLocalizations', []))
-    if declared != languages:
-        errors.append(f'Updater: missing languages {sorted(languages - declared)}; extra {sorted(declared - languages)}')
-    if set(strings(app / 'Localizable.strings')) != extracted_keys():
+    if check_extracted and set(strings(app / 'Localizable.strings')) != extracted_keys():
         errors.append('Localizable: extracted source is stale; run scripts/l10n/extract_l10n_strings.sh')
     for folder, table in tables:
         actual = {p.stem for p in folder.glob('*.lproj')}
@@ -69,8 +65,13 @@ def validate():
 
 
 if __name__ == '__main__':
-    supported, failures = validate()
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--catalogs-only", action="store_true", help="Skip genstrings extraction when Xcode is unavailable")
+    args = parser.parse_args()
+    supported, failures = validate(not args.catalogs_only)
     if failures:
         print('\n'.join(failures), file=sys.stderr)
         sys.exit(1)
-    print(f'App, ShortcutRecorder and Sparkle: complete catalogs for {len(supported)} languages; formats match')
+    if args.catalogs_only:
+        print('Source extraction was not checked (requires full Xcode).')
+    print(f'App and ShortcutRecorder: complete catalogs for {len(supported)} languages; formats match')

@@ -97,7 +97,7 @@ class SystemPermissions {
 
     private static func checkPermissionsPostStartup() {
         if AccessibilityPermission.status == .notGranted {
-            Logger.error { "Accessibility permission revoked while AltTab was running; restarting" }
+            Logger.error { "Accessibility permission revoked while Free-Alt-Tab was running; restarting" }
             DispatchQueue.main.async { App.restart() }
         }
     }
@@ -267,28 +267,7 @@ class ScreenRecordingPermission {
 
     // note: shows the system prompt if there's no permission
     private static func isGrantedOnSomeDisplay() -> Bool? {
-        if #available(macOS 12.3, *) {
-            return checkWithSCShareableContent()
-        } else {
-            let mainDisplayID = CGMainDisplayID()
-            let mainResult = checkWithCGDisplayStream(mainDisplayID)
-            var unknown = mainResult == nil
-            if mainResult == true {
-                return true
-            }
-            // maybe the main screen can't produce a CGDisplayStream, but another screen can
-            // a positive on any screen must mean that the permission is granted; we try on the other screens
-            for screen in NSScreen.screens {
-                if let id = screen.number(), id != mainDisplayID {
-                    let result = checkWithCGDisplayStream(id)
-                    unknown = unknown || result == nil
-                    if result == true {
-                        return true
-                    }
-                }
-            }
-            return unknown ? nil : false
-        }
+        checkWithSCShareableContent()
     }
 
     @available(macOS 12.3, *)
@@ -306,21 +285,6 @@ class ScreenRecordingPermission {
         }
     }
 
-    private static func checkWithCGDisplayStream(_ id: CGDirectDisplayID) -> Bool? {
-        return runWithTimeout { completion in
-            // this initializer can actually block for a while
-            // it's undocumented but has been proven by spindumps shared by AltTab users
-            let displayStream = CGDisplayStream(
-                dispatchQueueDisplay: id,
-                outputWidth: 1,
-                outputHeight: 1,
-                pixelFormat: Int32(kCVPixelFormatType_32BGRA),
-                properties: nil,
-                queue: .global()
-            ) { _, _, _, _ in }
-            completion(displayStream != nil)
-        }
-    }
 
     private static func runWithTimeout(_ block: @escaping (@escaping (Bool) -> Void) -> Void) -> Bool? {
         let semaphore = DispatchSemaphore(value: 0)

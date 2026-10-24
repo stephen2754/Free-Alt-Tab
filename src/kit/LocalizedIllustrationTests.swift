@@ -10,7 +10,7 @@ final class LocalizedIllustrationTests: XCTestCase {
 
     func testEveryIllustrationUsesReusableNativeVectorDrawing() throws {
         let drawer = try IllustrationDrawer(directory: resources)
-        XCTAssertEqual(drawer.archive.scenes.count, 29)
+        XCTAssertEqual(drawer.archive.scenes.count, 24)
         for name in drawer.archive.scenes.keys {
             let image = try XCTUnwrap(drawer.image(name), name)
             XCTAssertTrue(image.representations.contains { $0 is NSCustomImageRep }, name)
@@ -68,7 +68,7 @@ final class LocalizedIllustrationTests: XCTestCase {
     func testDrawingReusesPreparedTextWithoutRelocalizing() throws {
         let drawer = try IllustrationDrawer(directory: resources)
         var calls = 0
-        let image = try XCTUnwrap(drawer.image("search-comparison") { _, english in
+        let image = try XCTUnwrap(drawer.image("settings-thumbnails") { _, english in
             calls += 1
             return english
         })
@@ -80,11 +80,11 @@ final class LocalizedIllustrationTests: XCTestCase {
         XCTAssertEqual(calls, preparedCalls)
     }
 
-    func testAppearanceAndDirectionChangeTheRenderedComparison() throws {
+    func testAppearanceAndDirectionChangeTheRenderedIllustration() throws {
         let drawer = try IllustrationDrawer(directory: resources)
-        let light = try rendered(XCTUnwrap(drawer.image("search-comparison"))).representation(using: .png, properties: [:])
-        let dark = try rendered(XCTUnwrap(drawer.image("search-comparison", dark: true))).representation(using: .png, properties: [:])
-        let rtl = try rendered(XCTUnwrap(drawer.image("search-comparison", rightToLeft: true))).representation(using: .png, properties: [:])
+        let light = try rendered(XCTUnwrap(drawer.image("settings-thumbnails"))).representation(using: .png, properties: [:])
+        let dark = try rendered(XCTUnwrap(drawer.image("settings-thumbnails", dark: true))).representation(using: .png, properties: [:])
+        let rtl = try rendered(XCTUnwrap(drawer.image("settings-thumbnails", rightToLeft: true))).representation(using: .png, properties: [:])
         XCTAssertNotEqual(light, dark)
         XCTAssertNotEqual(light, rtl)
     }

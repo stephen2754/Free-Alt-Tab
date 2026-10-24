@@ -1,13 +1,9 @@
 import Cocoa
-import Sparkle
 import UniformTypeIdentifiers
 
 class GeneralTab {
     static var menubarIconDropdown: NSPopUpButton?
     static var menuIconShownToggle: Switch?
-    static var updatesPolicyDropdown: NSPopUpButton?
-    static var crashPolicyDropdown: NSPopUpButton?
-    static var policyLock = false
 
     static func initTab() -> NSView {
         let startAtLogin = TableGroupView.Row(leftTitle: NSLocalizedString("Start at login", comment: ""),
@@ -21,12 +17,8 @@ class GeneralTab {
             ])
         let language = TableGroupView.Row(leftTitle: NSLocalizedString("Language", comment: ""),
             rightViews: [LabelAndControl.makeDropdown("language", LanguagePreference.allCases, extraAction: setLanguageCallback)])
-        updatesPolicyDropdown = LabelAndControl.makeDropdown("updatePolicy", UpdatePolicyPreference.allCases)
         let checkForUpdates = NSButton(title: NSLocalizedString("Check for updates now…", comment: ""), target: nil, action: nil)
         checkForUpdates.onAction = { control in checkForUpdatesNow(control) }
-        crashPolicyDropdown = LabelAndControl.makeDropdown("crashPolicy", CrashPolicyPreference.allCases)
-        let crashPolicy = TableGroupView.Row(leftTitle: NSLocalizedString("Crash reports policy", comment: ""),
-            rightViews: [crashPolicyDropdown!])
         for i in 0..<MenubarIconPreference.allCases.count {
             let image = NSImage.initCopy("menubar-\(i)")
             image.isTemplate = MenubarIconPreference.allCases[i].isTemplate
@@ -47,12 +39,7 @@ class GeneralTab {
         table.addNewTable()
         table.addRow(language)
         table.addNewTable()
-        table.addRow(leftViews: [TableGroupView.makeText(NSLocalizedString("Updates policy", comment: ""))],
-            rightViews: [updatesPolicyDropdown!],
-            secondaryViews: [checkForUpdates],
-            secondaryViewsAlignment: .right,
-            secondaryViewsTopGap: 8)
-        table.addRow(crashPolicy)
+        table.addRow(rightViews: [checkForUpdates])
         let exportButton = NSButton(title: NSLocalizedString("Export settings…", comment: ""), target: nil, action: nil)
         exportButton.onAction = { _ in exportSettings() }
         let importButton = NSButton(title: NSLocalizedString("Import settings…", comment: ""), target: nil, action: nil)
@@ -61,7 +48,9 @@ class GeneralTab {
         resetButton.bezelStyle = .rounded
         resetButton.hasDestructiveAction = true
         resetButton.onAction = { _ in resetPreferences() }
-        let tools = StackView([exportButton, importButton, resetButton], .horizontal)
+        let altTabImportButton = NSButton(title: NSLocalizedString("Import from AltTab…", comment: "Settings import button"), target: nil, action: nil)
+        altTabImportButton.onAction = { _ in AltTabSettingsImport.show() }
+        let tools = StackView([exportButton, importButton, altTabImportButton, resetButton], .horizontal)
         let view = TableGroupSetView(originalViews: [table, tools], padding: 0, bottomPadding: 0)
         return view
     }
@@ -69,15 +58,11 @@ class GeneralTab {
     static func cleanup() {
         menubarIconDropdown = nil
         menuIconShownToggle = nil
-        updatesPolicyDropdown = nil
-        crashPolicyDropdown = nil
     }
 
     static func refreshControlsFromPreferences() {
         menubarIconDropdown?.selectItem(at: CachedUserDefaults.intFromMacroPref("menubarIcon", MenubarIconPreference.allCases))
         menubarIconDropdown?.isEnabled = Preferences.menubarIconShown
-        updatesPolicyDropdown?.selectItem(at: CachedUserDefaults.intFromMacroPref("updatePolicy", UpdatePolicyPreference.allCases))
-        crashPolicyDropdown?.selectItem(at: CachedUserDefaults.intFromMacroPref("crashPolicy", CrashPolicyPreference.allCases))
     }
 
     @objc static func resetPreferences() {
@@ -97,17 +82,14 @@ class GeneralTab {
     }
 
     @objc static func checkForUpdatesNow(_ sender: Any?) {
-        // The updater is lazy-started 30s after launch; if the user presses this button before
-        // then, defensively start it first (idempotent — second call is a no-op).
-        App.updaterController?.startUpdater()
-        App.updaterController?.checkForUpdates(sender)
+        NSWorkspace.shared.open(URL(string: Endpoints.releasesUrl)!)
     }
 
     private static func exportSettings() {
         let panel = NSSavePanel()
         panel.nameFieldStringValue = "\(App.bundleIdentifier).plist"
         panel.allowedContentTypes = [.propertyList]
-        presentPanel(panel) { NSDictionary(dictionary: Preferences.all).write(to: $0, atomically: true) }
+        presentPanel(panel) { NSDictionary(dictionary: Preferences.all.merging(["preferencesVersion": PreferencesFormat.current]) { _, version in version }).write(to: $0, atomically: true) }
     }
 
     private static func importSettings() {
@@ -125,20 +107,7 @@ class GeneralTab {
             alert.present(attachedTo: SettingsWindow.shared) { _ in }
             return
         }
-        let filtered = dict.filter { Preferences.ownedKeys.contains($0.key) }
-        UserDefaults.standard.setPersistentDomain(filtered, forName: App.bundleIdentifier)
-        CachedUserDefaults.cache.withLock { $0.removeAll() }
-        Preferences.invalidateAllCache()
-        let alert = NSAlert()
-        alert.alertStyle = .informational
-        alert.messageText = NSLocalizedString("Settings imported", comment: "")
-        alert.informativeText = NSLocalizedString("The application needs to restart to apply the imported settings.", comment: "")
-        alert.addButton(withTitle: NSLocalizedString("Restart Now", comment: ""))
-        let laterButton = alert.addButton(withTitle: NSLocalizedString("Later", comment: ""))
-        laterButton.keyEquivalent = "\u{1b}" // Escape
-        alert.present(attachedTo: SettingsWindow.shared) {
-            if $0 == .alertFirstButtonReturn { App.restart() }
-        }
+        AltTabSettingsImport.show(source: dict, remembered: [:], fromAltTab: false)
     }
 
     /// Attached to Settings when it is on screen, like this tab's alerts. The choice is handled on the next turn,

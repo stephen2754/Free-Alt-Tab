@@ -210,7 +210,7 @@ final class AnchoredPopoverTests: XCTestCase {
         popover.close()
     }
 
-    func testTheTrialAnnouncementIsConsumedOnlyAfterThePopoverAppears() {
+    func testPresentationIsAcknowledgedOnlyAfterThePopoverAppears() {
         let popover = TestPopover()
         let anchor = NSView()
         var announcements = 0

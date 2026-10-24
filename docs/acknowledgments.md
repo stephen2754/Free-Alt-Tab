@@ -1,12 +1,11 @@
 ## Acknowledgments
 
-These third-party libraries are used:
+**AltTab** by Louis Pontoise and contributors
 
-**ShortcutRecorder**
-[Website](https://github.com/Kentzo/ShortcutRecorder) - [CC 4.0 License](https://github.com/Kentzo/ShortcutRecorder/blob/master/LICENSE.txt)
+[Source and contributor history](https://github.com/lwouis/alt-tab-macos) · GPL-3.0. Free-Alt-Tab is an independent modified version, with changes beginning on 2026-10-24.
 
-**Sparkle**
-[Website](https://github.com/sparkle-project/Sparkle) - [License](https://github.com/sparkle-project/Sparkle/blob/master/LICENSE)
+**ShortcutRecorder** by the ShortcutRecorder contributors
 
-**AppCenter**
-[Website](https://github.com/microsoft/appcenter-sdk-apple) - [Custom](https://github.com/microsoft/appcenter-sdk-apple/blob/develop/LICENSE)
+[Upstream](https://github.com/Kentzo/ShortcutRecorder) · [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/). The vendored snapshot and its license are included under `vendor/ShortcutRecorder/`; its source and version are recorded in `UPSTREAM`.
+
+Original contributor acknowledgments remain in the repository history and `docs/contributors.md`.

@@ -11,6 +11,7 @@ class AboutTab {
             BoldLabel(App.name),
             NSTextField(labelWithString: NSLocalizedString("Version", comment: "") + " " + App.version),
             NSTextField(labelWithString: App.licence),
+            HyperlinkLabel(NSLocalizedString("Based on AltTab by Louis Pontoise and contributors", comment: "Upstream attribution"), "https://github.com/lwouis/alt-tab-macos"),
             HyperlinkLabel(NSLocalizedString("Website", comment: ""), Endpoints.website),
             HyperlinkLabel(NSLocalizedString("Source code", comment: ""), App.repository),
         ], .vertical)
@@ -27,7 +28,7 @@ class AboutTab {
         if centerHero {
             grid.cell(atColumnIndex: 0, rowIndex: 0).xPlacement = .center
         }
-        let supportProjectCell = grid.cell(atColumnIndex: 0, rowIndex: showFeedbackButton ? 2 : 1)
+        let supportProjectCell = grid.cell(atColumnIndex: 0, rowIndex: 1)
         supportProjectCell.xPlacement = .center
         if fitToContent {
             grid.fit()
@@ -129,7 +130,7 @@ class AboutWindow: NSPanel {
         let weekCount = UsageStats.count("triggers", since: now.addingTimeInterval(-7 * 24 * 3600))
         let monthCount = UsageStats.count("triggers", since: now.addingTimeInterval(-30 * 24 * 3600))
         let yearCount = UsageStats.count("triggers", since: now.addingTimeInterval(-365 * 24 * 3600))
-        let markdown = "## \(NSLocalizedString("Usage", comment: ""))\n\nYou have used AltTab:\n\u{2022} **\(weekCount)** times in the past week\n\u{2022} **\(monthCount)** times in the past month\n\u{2022} **\(yearCount)** times in the past year"
+        let markdown = "## \(NSLocalizedString("Usage", comment: ""))\n\nYou have used Free-Alt-Tab:\n\u{2022} **\(weekCount)** times in the past week\n\u{2022} **\(monthCount)** times in the past month\n\u{2022} **\(yearCount)** times in the past year"
         usageTextView.textStorage!.setAttributedString(Markdown.toAttributedString(markdown))
         usageTextView.layoutManager!.ensureLayout(for: usageTextView.textContainer!)
         let usedRect = usageTextView.layoutManager!.usedRect(for: usageTextView.textContainer!)
