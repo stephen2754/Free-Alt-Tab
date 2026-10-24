@@ -80,12 +80,12 @@ final class LocalizedIllustrationTests: XCTestCase {
         XCTAssertEqual(calls, preparedCalls)
     }
 
-    func testAppearanceAndDirectionChangeTheRenderedIllustration() throws {
+    func testUnthemedArtworkStaysStableAndPermissionLayoutMirrors() throws {
         let drawer = try IllustrationDrawer(directory: resources)
         let light = try rendered(XCTUnwrap(drawer.image("permission-accessibility"))).representation(using: .png, properties: [:])
         let dark = try rendered(XCTUnwrap(drawer.image("permission-accessibility", dark: true))).representation(using: .png, properties: [:])
         let rtl = try rendered(XCTUnwrap(drawer.image("permission-accessibility", rightToLeft: true))).representation(using: .png, properties: [:])
-        XCTAssertNotEqual(light, dark)
+        XCTAssertEqual(light, dark, "Artwork without theme overrides must remain unchanged")
         XCTAssertNotEqual(light, rtl)
     }
 
