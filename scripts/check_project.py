@@ -33,7 +33,7 @@ def check():
         elif obj['isa'] == 'PBXFileReference' and obj.get('sourceTree') in {'SOURCE_ROOT', '<group>'}:
             path = (ROOT if obj['sourceTree'] == 'SOURCE_ROOT' else directory) / obj.get('path', '')
             paths[identifier] = path
-            if not path.exists():
+            if path.is_relative_to(ROOT) and not path.exists():
                 errors.append(f'Missing project file: {path.relative_to(ROOT)}')
 
     walk(objects[project['rootObject']]['mainGroup'])
